@@ -337,7 +337,7 @@ Test data (pasted to textarea, including spaces):
 underscore_case
 first_name
 Some_Variable
- calculate_AGE
+calculate_AGE
 delayed_departure
 Should produce this output (5 separate console.log outputs):
 underscoreCase ✅
@@ -370,6 +370,6 @@ document.querySelector("button").addEventListener("click", function () {
     const secondText = splitText[1]; // asign second split word
     const finalText =
       splitText[0] + secondText[0].toUpperCase() + secondText.slice(1); // Create string
-    console.log(`${finalText} ${"✅".repeat(i + 1)}`); // log result and repeat "✅" according to its Arrayindex +1
+    console.log(`${finalText.padEnd(20)}${"✅".repeat(i + 1)}`); // log result and repeat "✅" according to its Arrayindex +1
   }
 });
