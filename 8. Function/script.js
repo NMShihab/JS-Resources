@@ -127,17 +127,47 @@ const poll = {
   options: ["0: JavaScript", "1: Python", "2: Rust", "3: C++"],
   // This generates [0, 0, 0, 0]. More in the next section!
   answers: new Array(4).fill(0),
-  registerNewAnswer() {
-    const answer = prompt(
-      `${this.question} \n${this.options.join("\n")}\n(Write option number)`
-    );
-    for (let i = 0; i < this.answers.length; i++) {
-      if (i === Number(answer)) {
-        this.answers[i]++;
-      }
+  displayResults(type = "array") {
+    if (type === "array") {
+      console.log(this.answers);
+    } else if (type === "string") {
+      console.log(`Poll results are ${this.answers.join(", ")}`);
     }
+  },
+  registerNewAnswer() {
+    const answer = Number(
+      prompt(
+        `${this.question} \n${this.options.join("\n")}\n(Write option number)`
+      )
+    );
+
+    if (answer < this.answers.length) {
+      for (let i = 0; i < this.answers.length; i++) {
+        if (i === answer) {
+          this.answers[i]++;
+
+          // console.log(typeof this.answers);
+        }
+      }
+    } else {
+      alert(" Invalid input.. Check question clearly");
+    }
+    this.displayResults();
+    this.displayResults("string");
   },
 };
 
-poll.registerNewAnswer();
-console.log(poll.answers);
+// document.querySelector(".poll").addEventListener("click", function () {
+//   poll.registerNewAnswer();
+//   console.log(poll.answers);
+// });
+document
+  .querySelector(".poll")
+  .addEventListener("click", poll.registerNewAnswer.bind(poll));
+
+const data1 = [5, 2, 3];
+const data2 = [1, 5, 3, 9, 6, 1];
+poll.displayResults.call({ answers: data1 });
+poll.displayResults.call({ answers: data1 }, "string");
+poll.displayResults.call({ answers: data2 }, "string");
+poll.displayResults.call({ answers: data1 }, "string");
