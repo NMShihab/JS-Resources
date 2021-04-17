@@ -81,6 +81,19 @@ const displayTransactions = function (transaction) {
 
 displayTransactions(account1.movements);
 
+// Create username
+const ctrateUsername = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner //create new value username of account object
+      .toLowerCase() // convert owner name into lower case
+      .split(" ") // split owner name according to space and make  array
+      .map((str) => str[0]) // return every first leter of array
+      .join(""); // join all return letter together
+  });
+};
+
+ctrateUsername(accounts);
+console.log(accounts);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -209,13 +222,16 @@ Hints: Use tools from all lectures in this section so far �
 GOOD LUCK �
 */
 
+/*
 console.log("-------------Challange 1--------------");
 const checkDogs = function (dogsJulia, dogsKate) {
   const copiedJulia = [...dogsJulia];
   const copiedKate = [...dogsKate];
 
-  const actualDogJulia = copiedJulia.slice(1, 4);
-  const dogdata = actualDogJulia.concat(copiedKate);
+  // const actualDogJulia = copiedJulia.slice(1, 4);
+  copiedJulia.splice(0, 1);
+  copiedJulia.splice(-2);
+  const dogdata = copiedJulia.concat(copiedKate);
 
   dogdata.forEach(function (age, i) {
     age >= 3
@@ -223,7 +239,7 @@ const checkDogs = function (dogsJulia, dogsKate) {
       : console.log(`Dog number ${i + 1} is still a puppy`);
   });
 
-  console.log(dogdata);
+  console.log(copiedJulia);
 };
 
 const dogsJuliaData1 = [3, 5, 2, 12, 7];
@@ -235,3 +251,29 @@ console.log("-------Test Data 1-----------");
 checkDogs(dogsJuliaData1, dogsKateData1);
 console.log("-------Test Data 2-----------");
 checkDogs(dogsJuliaData2, dogsKateData2);
+
+*/
+
+// Map method
+/*
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const euroToTaka = 101.6; */
+/*
+const movementsTaka = movements.map(function (mov) {
+  return mov * euroToTaka;
+}); */
+
+// arrow function
+/*
+const movementsTaka = movements.map((mov) => mov * euroToTaka);
+console.log(movements);
+console.log(movementsTaka);
+
+const transactionDescription = movementsTaka.map(
+  (mov, i) =>
+    `Movements ${i + 1} You ${mov > 0 ? `deposite` : `withdraw`} ${Math.abs(
+      mov
+    )}`
+);
+console.log(transactionDescription); 
+*/
