@@ -103,10 +103,33 @@ const claculateBalance = function (movement) {
 
 claculateBalance(account1.movements);
 
+// Calculation Statistis
+
+const calculationStatistic = function (movements) {
+  const income = movements
+    .filter((map) => map > 0) // return all deposite value
+    .reduce((acc, map) => acc + map, 0); // sum all deposite
+  labelSumIn.textContent = `${income}€`;
+
+  const out = movements
+    .filter((map) => map < 0) // return all withdraw value
+    .reduce((acc, map) => acc + Math.abs(map), 0); // Sum all withdraw
+  labelSumOut.textContent = `${out}€`;
+
+  const interest = movements
+    .filter((mov) => mov > 0) // return deposite values
+    .map((deposite) => (deposite * 1.2) / 100) // calculate interest of every values
+    .filter((int) => int > 1) // return only the interest value > 1
+    .reduce((acc, int) => acc + int, 0); // Sum all the values
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calculationStatistic(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-/*
+
 const currencies = new Map([
   ["USD", "United States dollar"],
   ["EUR", "Euro"],
@@ -116,7 +139,7 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
-
+/*
 // Slice
 let arr = ["a", "b", "g", "t", "l"];
 console.log(arr.slice(2));
@@ -336,7 +359,8 @@ Test data:
 § Data 2: [16, 6, 10, 5, 6, 1, 4]
 GOOD LUCK � 
 */
-
+/*
+console.log("-------------Challange 2--------------");
 const calcAverageHumanAge = function (ages) {
   const avgAge = ages.map((age) => {
     if (age <= 2) return 2 * age;
@@ -345,6 +369,42 @@ const calcAverageHumanAge = function (ages) {
   const adultDogs = avgAge.filter((age) => age >= 18);
   const sumAdultDogs = adultDogs.reduce((acc, age) => acc + age, 0);
   const avgAdultDogsAge = sumAdultDogs / adultDogs.length;
+  return avgAdultDogsAge;
+};
+const data1 = [5, 2, 4, 1, 15, 8, 3];
+const data2 = [16, 6, 10, 5, 6, 1, 4];
+const avg1 = calcAverageHumanAge(data1);
+const avg2 = calcAverageHumanAge(data2);
+console.log(avg1);
+console.log(avg2);
+*/
+
+// Chaining Method
+/*
+const euroToTaka = 101.6;
+const depositeTaka = movements
+  .filter((mov) => mov > 0)
+  .map((mov) => mov * euroToTaka)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(depositeTaka);
+*/
+
+/*
+Coding Challenge #3
+Rewrite the 'calcAverageHumanAge' function from Challenge #2, but this time
+as an arrow function, and using chaining!
+Test data:
+§ Data 1: [5, 2, 4, 1, 15, 8, 3]
+§ Data 2: [16, 6, 10, 5, 6, 1, 4]
+GOOD LUCK �
+*/
+
+console.log("-------------Challange 3--------------");
+const calcAverageHumanAge = function (ages) {
+  const avgAdultDogsAge = ages
+    .map((age) => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter((age) => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
   return avgAdultDogsAge;
 };
 const data1 = [5, 2, 4, 1, 15, 8, 3];
