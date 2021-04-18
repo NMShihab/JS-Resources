@@ -101,12 +101,10 @@ const claculateBalance = function (movement) {
   console.log(totalBalance);
 };
 
-claculateBalance(account1.movements);
-
 // Calculation Statistis
 
-const calculationStatistic = function (movements) {
-  const income = movements
+const calculationStatistic = function (acc) {
+  const income = acc.movements
     .filter((map) => map > 0) // return all deposite value
     .reduce((acc, map) => acc + map, 0); // sum all deposite
   labelSumIn.textContent = `${income}€`;
@@ -118,13 +116,43 @@ const calculationStatistic = function (movements) {
 
   const interest = movements
     .filter((mov) => mov > 0) // return deposite values
-    .map((deposite) => (deposite * 1.2) / 100) // calculate interest of every values
+    .map((deposite) => (deposite * acc.interestRate) / 100) // calculate interest of every values
     .filter((int) => int > 1) // return only the interest value > 1
     .reduce((acc, int) => acc + int, 0); // Sum all the values
   labelSumInterest.textContent = `${interest}€`;
 };
 
-calculationStatistic(account1.movements);
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const currentAcount = accounts.find(
+    (acc) =>
+      acc.username === inputLoginUsername.value &&
+      acc.pin === Number(inputLoginPin.value)
+  );
+  // if user and password is not right
+  if (!currentAcount) {
+    labelWelcome.textContent = `Wrong user name or password`;
+  }
+  // Clear input fields
+  inputLoginUsername.value = inputLoginPin.value = "";
+
+  //remove cursor from input field
+  inputLoginUsername.blur();
+  inputLoginPin.blur();
+
+  // Welcome message
+  labelWelcome.textContent = `Welcome ${currentAcount.owner}!`;
+
+  // To show body
+  containerApp.style.opacity = 100;
+  // display all transaction
+  displayTransactions(currentAcount.movements);
+  // Display Balance
+  claculateBalance(currentAcount.movements);
+  // Display account statistics
+  calculationStatistic(currentAcount);
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -399,6 +427,7 @@ Test data:
 GOOD LUCK �
 */
 
+/*
 console.log("-------------Challange 3--------------");
 const calcAverageHumanAge = function (ages) {
   const avgAdultDogsAge = ages
@@ -413,3 +442,4 @@ const avg1 = calcAverageHumanAge(data1);
 const avg2 = calcAverageHumanAge(data2);
 console.log(avg1);
 console.log(avg2);
+*/
