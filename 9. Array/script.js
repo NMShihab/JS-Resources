@@ -208,6 +208,26 @@ btnClose.addEventListener("click", function (e) {
   }
 });
 
+// Request Loan
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const loanAmount = Number(inputLoanAmount.value);
+  if (
+    loanAmount > 0 &&
+    currentAcount.movements.some((mov) => mov >= loanAmount * 0.1)
+  ) {
+    // Update movements
+    currentAcount.movements.push(loanAmount);
+    // Update UI
+    updateUI();
+
+    console.log("Loan Accepted");
+  } else {
+    console.log("Loan decline");
+  }
+  inputLoanAmount.value = "";
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -497,3 +517,11 @@ const avg2 = calcAverageHumanAge(data2);
 console.log(avg1);
 console.log(avg2);
 */
+
+// Some Methods
+console.log(movements);
+// Its return boolean value for exact input
+console.log(movements.includes(-40));
+// Its return boolean value for exact input also conditional input
+const anyDeposite = movements.some((mov) => mov > 0);
+console.log(anyDeposite);
