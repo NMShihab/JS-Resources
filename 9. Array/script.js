@@ -95,10 +95,9 @@ const ctrateUsername = function (accs) {
 ctrateUsername(accounts);
 
 // Calculate total balance
-const claculateBalance = function (movement) {
-  const totalBalance = movement.reduce((acc, cur) => acc + cur, 0);
-  labelBalance.textContent = totalBalance + "€";
-  console.log(totalBalance);
+const claculateBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 // Calculation Statistis
@@ -122,10 +121,23 @@ const calculationStatistic = function (acc) {
   labelSumInterest.textContent = `${interest}€`;
 };
 
+const updateUI = function () {
+  // display all transaction
+  displayTransactions(currentAcount.movements);
+  // Display Balance
+  claculateBalance(currentAcount);
+  // Display account statistics
+  calculationStatistic(currentAcount);
+};
+
+let currentAcount;
+
+// Login functionality
 btnLogin.addEventListener("click", function (e) {
+  // Prevent to refresh the page
   e.preventDefault();
 
-  const currentAcount = accounts.find(
+  currentAcount = accounts.find(
     (acc) =>
       acc.username === inputLoginUsername.value &&
       acc.pin === Number(inputLoginPin.value)
@@ -146,12 +158,54 @@ btnLogin.addEventListener("click", function (e) {
 
   // To show body
   containerApp.style.opacity = 100;
-  // display all transaction
-  displayTransactions(currentAcount.movements);
-  // Display Balance
-  claculateBalance(currentAcount.movements);
-  // Display account statistics
-  calculationStatistic(currentAcount);
+
+  // Update UI
+  updateUI();
+});
+
+// Money Transfer functionality
+btnTransfer.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const transferAmount = Number(inputTransferAmount.value);
+
+  // Find the transfer account
+  const transferAccount = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+  if (
+    transferAmount > 0 &&
+    transferAccount &&
+    currentAcount.balance >= transferAmount &&
+    transferAccount?.username !== currentAcount.username
+  ) {
+    currentAcount.movements.push(-transferAmount); // update current account movements
+    transferAccount.movements.push(transferAmount); // update transfared account movements
+  }
+  inputTransferTo.value = inputTransferAmount.value = "";
+  //update ui
+  updateUI();
+});
+
+// Delete account
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAcount.username &&
+    Number(inputClosePin.value) === currentAcount.pin
+  ) {
+    const curIndex = accounts.findIndex(
+      (acc) => acc.username === currentAcount.username
+    );
+    accounts.splice(curIndex, 1);
+    // Welcome message
+    labelWelcome.textContent = `Log in to get started`;
+
+    // To show body
+    containerApp.style.opacity = 0;
+
+    inputCloseUsername.value = inputClosePin.value = "";
+  }
 });
 
 /////////////////////////////////////////////////
