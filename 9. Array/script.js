@@ -61,9 +61,10 @@ const inputLoanAmount = document.querySelector(".form__input--loan-amount");
 const inputCloseUsername = document.querySelector(".form__input--user");
 const inputClosePin = document.querySelector(".form__input--pin");
 
-const displayTransactions = function (transaction) {
+const displayTransactions = function (transaction, sort = false) {
   containerMovements.innerHTML = "";
-  transaction.forEach(function (mov, i) {
+  const trans = sort ? transaction.slice().sort((a, b) => a - b) : transaction;
+  trans.forEach(function (mov, i) {
     const type = mov > 0 ? "deposit" : "withdrawal";
 
     const html = `
@@ -108,12 +109,12 @@ const calculationStatistic = function (acc) {
     .reduce((acc, map) => acc + map, 0); // sum all deposite
   labelSumIn.textContent = `${income}€`;
 
-  const out = movements
+  const out = acc.movements
     .filter((map) => map < 0) // return all withdraw value
     .reduce((acc, map) => acc + Math.abs(map), 0); // Sum all withdraw
   labelSumOut.textContent = `${out}€`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter((mov) => mov > 0) // return deposite values
     .map((deposite) => (deposite * acc.interestRate) / 100) // calculate interest of every values
     .filter((int) => int > 1) // return only the interest value > 1
@@ -121,13 +122,13 @@ const calculationStatistic = function (acc) {
   labelSumInterest.textContent = `${interest}€`;
 };
 
-const updateUI = function () {
+const updateUI = function (currAcc) {
   // display all transaction
-  displayTransactions(currentAcount.movements);
+  displayTransactions(currAcc.movements);
   // Display Balance
-  claculateBalance(currentAcount);
+  claculateBalance(currAcc);
   // Display account statistics
-  calculationStatistic(currentAcount);
+  calculationStatistic(currAcc);
 };
 
 let currentAcount;
@@ -160,7 +161,7 @@ btnLogin.addEventListener("click", function (e) {
   containerApp.style.opacity = 100;
 
   // Update UI
-  updateUI();
+  updateUI(currentAcount);
 });
 
 // Money Transfer functionality
@@ -184,7 +185,7 @@ btnTransfer.addEventListener("click", function (e) {
   }
   inputTransferTo.value = inputTransferAmount.value = "";
   //update ui
-  updateUI();
+  updateUI(currentAcount);
 });
 
 // Delete account
@@ -219,13 +220,21 @@ btnLoan.addEventListener("click", function (e) {
     // Update movements
     currentAcount.movements.push(loanAmount);
     // Update UI
-    updateUI();
+    updateUI(currentAcount);
 
     console.log("Loan Accepted");
   } else {
     console.log("Loan decline");
   }
   inputLoanAmount.value = "";
+});
+
+let isSorted = false;
+
+btnSort.addEventListener("click", function (e) {
+  e.preventDefault();
+  displayTransactions(currentAcount.movements, !isSorted);
+  isSorted = !isSorted;
 });
 
 /////////////////////////////////////////////////
@@ -518,6 +527,7 @@ console.log(avg1);
 console.log(avg2);
 */
 
+/*
 // Some Methods
 console.log(movements);
 // Its return boolean value for exact input
@@ -525,3 +535,42 @@ console.log(movements.includes(-40));
 // Its return boolean value for exact input also conditional input
 const anyDeposite = movements.some((mov) => mov > 0);
 console.log(anyDeposite);
+
+// Every
+console.log(movements.every((mov) => mov > 0));
+
+// Flat method
+const arr = [[1, 2, 3], 4, 5, [6, 7]];
+console.log(arr.flat());
+
+const overAll = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(overAll);
+*/
+
+// Sorting
+
+// Strings
+const owners = ["Zaheer", "Babu", "Asif", "Naim"];
+console.log(owners.sort());
+
+//Numbers
+
+console.log(movements);
+
+// if returns < 0 then A,B
+// If returns > 0 then B,A
+
+// Accending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+//Decending order
+movements.sort((a, b) => b - a);
+console.log(movements);
