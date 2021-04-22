@@ -550,6 +550,7 @@ const overAll = accounts
 console.log(overAll);
 */
 
+/*
 // Sorting
 
 // Strings
@@ -574,3 +575,93 @@ console.log(movements);
 //Decending order
 movements.sort((a, b) => b - a);
 console.log(movements);
+ */
+
+// Array From
+
+const a = Array.from({ length: 9 }, () => 1);
+// console.log(a);
+
+const b = Array.from({ length: 9 }, (cur, i) => i ** 2);
+// console.log(b);
+
+// 100 random dice roll
+const diceRandom = Array.from(
+  { length: 100 },
+  () => Math.trunc(Math.random() * 6) + 1
+);
+// console.log(diceRandom);
+
+// Get data from UI
+labelBalance.addEventListener("click", function (e) {
+  e.preventDefault();
+  const movementsUI = Array.from(
+    document.querySelectorAll(".movements__value"),
+    (el) => Number(el.textContent.replace("€", ""))
+  );
+  // console.log(movementsUI);
+});
+
+// Array Extercise
+console.log("-------Exercise---------");
+
+// 1. Sum of bank deposit
+
+const bankDepositeSum = accounts
+  .map((acc) => acc.movements) // take all movements
+  .flat() // make them one array
+  .filter((mov) => mov > 0) // filter only deposite
+  .reduce((curr, mov) => curr + mov, 0); // sum up all deposite
+
+const bankDepositeSum2 = accounts
+  .flatMap((acc) => acc.movements) // take all movements and make them one array
+  .filter((mov) => mov > 0) // filter only deposite
+  .reduce((curr, mov) => curr + mov, 0); // sum up all deposite
+
+console.log(bankDepositeSum);
+console.log(bankDepositeSum2);
+
+// 2. Count all deposite atleast 1000 dollar
+
+const countDeposite = accounts
+  .flatMap((acc) => acc.movements)
+  .filter((mov) => mov >= 1000).length;
+
+const countDeposite2 = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce((count, curr) => (curr >= 1000 ? count + 1 : count), 0);
+console.log(countDeposite);
+console.log(countDeposite2);
+
+// 3. Sum of all withdraw and deposite
+const sums = accounts
+  .flatMap((acc) => acc.movements)
+  .reduce(
+    (sum, curr) => {
+      // curr > 0 ? (sum.deposite += curr) : (sum.withdraw += Math.abs(curr));
+      sum[curr > 0 ? "deposite" : "withdraw"] += curr;
+      return sum;
+    },
+    { deposite: 0, withdraw: 0 }
+  );
+console.log(sums);
+
+// Convert text
+
+const convertTitleCase = function (title) {
+  const capitalize = (str) => str[0].toUpperCase() + str.slice(1);
+  const exceptions = ["a", "an", "and", "the", "but", "or", "on", "in", "with"];
+
+  const titleCase = title
+    .toLowerCase()
+    .split(" ")
+    .map((word) => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(" ");
+
+  return capitalize(titleCase);
+};
+
+console.log(convertTitleCase("This is a nice title"));
+console.log(convertTitleCase("a nice title"));
+console.log(convertTitleCase("Hello what is a nice title"));
+console.log(convertTitleCase("This is a nice title"));
