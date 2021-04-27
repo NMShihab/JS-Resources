@@ -205,7 +205,7 @@ const whereAmI = function () {
     .catch((err) => console.log(err));
 };
 
-btn.addEventListener("click", whereAmI);
+// btn.addEventListener("click", whereAmI);
 
 /*
 Coding Challenge #2
@@ -298,3 +298,35 @@ createImage("img/img-1.jpg")
   })
   .catch((err) => console.error(err));
 */
+
+// Write same WhreamI function using async await
+const whereIsIt = async function () {
+  try {
+    // Get current location
+    const geoLoc = await getCurrentLocation();
+    const { latitude, longitude } = geoLoc.coords;
+
+    // Reverse Geocoding
+    const resGeo = await fetch(
+      `https://geocode.xyz/${latitude},${longitude}?geoit=json`
+    );
+    if (!resGeo.ok) throw new Error(`Not found Geo location try again`);
+
+    const dataGeo = await resGeo.json();
+    // Country Data
+    const resCountry = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    );
+    if (!resCountry.ok) throw new Error(`Not found Country try again`);
+    const dataCountry = await resCountry.json();
+
+    // Render country
+    renderCountry(dataCountry[0]);
+    console.log(dataCountry);
+  } catch (err) {
+    console.error(err.message);
+    renderError(`${err.message}`);
+  }
+};
+// btn.addEventListener("click", whereIsIt);
+whereIsIt();
